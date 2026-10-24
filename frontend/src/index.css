@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-trading-bg text-trading-text font-sans antialiased selection:bg-sky-500/30 selection:text-sky-200 min-h-screen;
+    color-scheme: dark;
+  }
+}
+
+/* Custom sleek trading scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0B0F17;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2A364F;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3B82F6;
+}
+
+/* Financial chart tooltips styling */
+.recharts-default-tooltip {
+  background-color: rgba(18, 24, 36, 0.95) !important;
+  border: 1px solid #2A364F !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(8px) !important;
+  color: #F1F5F9 !important;
+}
+
+/* Glass card styling */
+.glass-panel {
+  background: rgba(18, 24, 36, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.glow-actual {
+  box-shadow: 0 0 20px -5px rgba(16, 185, 129, 0.25);
+}
+
+.glow-forecast {
+  box-shadow: 0 0 20px -5px rgba(99, 102, 241, 0.25);
+}
