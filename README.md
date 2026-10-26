@@ -3,6 +3,8 @@
 > **UK Day-Ahead Power Procurement & Wind Forecast Risk Analytics Platform**  
 > *Production-Grade System for Wholesale Energy Trading Desks (January 2026 Delivery Window)*
 
+🌐 **Live Demo:** [https://uk-bmrs-risk-engine.onrender.com/](https://uk-bmrs-risk-engine.onrender.com/)
+
 [![Docker Build](https://img.shields.io/badge/Docker-Multi--Stage%20Passing-2496ED?style=flat&logo=docker)](https://www.docker.com)
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat&logo=python)](https://www.python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110.0-009688?style=flat&logo=fastapi)](https://fastapi.tiangolo.com)
