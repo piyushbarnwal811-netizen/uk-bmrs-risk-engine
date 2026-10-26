@@ -18,9 +18,8 @@
 
 | Resource | URL Link | Notes |
 | :--- | :--- | :--- |
-| 🌐 **Live Web Application** | `[Insert Live App URL]` | Hosted on Heroku / Vercel with single-port multi-stage container |
-| 🎥 **Video Demo Walkthrough** | `[Insert YouTube URL]` | 3–5 min unlisted walkthrough of cutoff mechanics & desk UI |
-| 📦 **GitHub Repository** | `https://github.com/anonymous/kjhwr-wind-procurement` | Anonymous submission root |
+| 🌐 **Live Web Application** | [Open the UK BMRS Risk Engine](https://uk-bmrs-risk-engine.onrender.com/) | Live deployment hosted on Render |
+| 📦 **GitHub Repository** | [View the source code](https://github.com/piyushbarnwal811-netizen/uk-bmrs-risk-engine) | Project repository, documentation, and deployment files |
 
 ---
 
