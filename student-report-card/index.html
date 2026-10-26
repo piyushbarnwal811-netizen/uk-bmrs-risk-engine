@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartGrade - Academic Student Report Card & Marksheet Generator</title>
+  <meta name="description" content="Generate, customize, and print high-resolution academic student report cards and marksheets with real-time grade calculations, GPA analytics, and official school seals.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container" id="app-container">
+    
+    <!-- Top Global Header -->
+    <header class="app-header" id="main-header">
+      <div class="header-brand">
+        <div class="brand-icon">
+          <i class="ph-bold ph-graduation-cap"></i>
+        </div>
+        <div>
+          <h1 class="brand-title">SmartGrade <span class="badge-pro">Pro Marksheet</span></h1>
+          <p class="brand-subtitle">Institution-Grade Academic Performance & Report Card Generator</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Preset Dropdown -->
+        <div class="preset-wrapper">
+          <label for="preset-select" class="control-label"><i class="ph-bold ph-magic-wand"></i> Sample Preset:</label>
+          <select id="preset-select" class="form-select">
+            <option value="topper_science">CBSE 10th Board (Science Topper)</option>
+            <option value="commerce_stream">Senior Secondary (Commerce & Math)</option>
+            <option value="middle_school">Middle School (All-Rounder)</option>
+            <option value="blank">Custom / Blank Slate</option>
+          </select>
+        </div>
+
+        <button id="btn-export-json" class="btn btn-secondary" title="Save data as JSON file">
+          <i class="ph-bold ph-download-simple"></i> Export Data
+        </button>
+
+        <label for="import-json-input" class="btn btn-secondary" title="Import data from JSON file">
+          <i class="ph-bold ph-upload-simple"></i> Import
+          <input type="file" id="import-json-input" accept=".json" class="visually-hidden">
+        </label>
+
+        <button id="btn-copy-summary" class="btn btn-secondary" title="Copy parent notification summary">
+          <i class="ph-bold ph-copy"></i> Copy SMS/Text
+        </button>
+
+        <button id="btn-print-pdf" class="btn btn-primary" title="Print or Save as PDF">
+          <i class="ph-bold ph-printer"></i> Print / Save PDF
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace Split Grid -->
+    <main class="workspace-layout">
+
+      <!-- LEFT SIDEBAR: Interactive Form Controls -->
+      <section class="editor-panel" id="editor-panel" aria-label="Report Card Customizer">
+        <div class="panel-header">
+          <h2 class="panel-title"><i class="ph-bold ph-sliders-horizontal"></i> Configuration & Data</h2>
+          <span class="panel-status-tag">Real-Time Sync</span>
+        </div>
+
+        <!-- Section 1: Template & Appearance -->
+        <div class="accordion-item active">
+          <button type="button" class="accordion-toggle" aria-expanded="true">
+            <span class="acc-title"><i class="ph-bold ph-palette"></i> Theme & Layout Style</span>
+            <i class="ph-bold ph-caret-down acc-arrow"></i>
+          </button>
+          <div class="accordion-content">
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label for="theme-selector">Color Theme</label>
+                <select id="theme-selector" class="form-select">
+                  <option value="theme-royal">Royal Gold & Navy (Imperial)</option>
+                  <option value="theme-emerald">Emerald Green & Bronze</option>
+                  <option value="theme-maroon">Burgundy & Rose Gold</option>
+                  <option value="theme-slate">Modern Academic Slate</option>
+                </select>
+              </div>
+              <div class="form-group col-6">
+                <label for="border-selector">Certificate Border Style</label>
+                <select id="border-selector" class="form-select">
+                  <option value="border-ornate">Traditional Ornate Filigree</option>
+                  <option value="border-classic">Double Gold Border</option>
+                  <option value="border-clean">Modern Clean Geometric</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row toggles-row">
+              <label class="toggle-control">
+                <input type="checkbox" id="toggle-watermark" checked>
+                <span class="toggle-track"></span>
+                <span class="toggle-text">Show Center Crest Watermark</span>
+              </label>
+              <label class="toggle-control">
+                <input type="checkbox" id="toggle-seal" checked>
+                <span class="toggle-track"></span>
+                <span class="toggle-text">Include Certified Stamp Seal</span>
+              </label>
+              <label class="toggle-control">
+                <input type="checkbox" id="toggle-student-photo" checked>
+                <span class="toggle-track"></span>
+                <span class="toggle-text">Show Student Photo</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: School / Institution Details -->
+        <div class="accordion-item">
+          <button type="button" class="accordion-toggle" aria-expanded="false">
+            <span class="acc-title"><i class="ph-bold ph-buildings"></i> Institution & School Info</span>
+            <i class="ph-bold ph-caret-down acc-arrow"></i>
+          </button>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="school-name">School / College Name</label>
+              <input type="text" id="school-name" class="form-input" placeholder="e.g. ST. AUGUSTINE ACADEMY OF EXCELLENCE">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-8">
+                <label for="school-board">Affiliation & Accreditation</label>
+                <input type="text" id="school-board" class="form-input" placeholder="Affiliated to CBSE / Council for ICSE, New Delhi">
+              </div>
+              <div class="form-group col-4">
+                <label for="school-code">School / Affil No.</label>
+                <input type="text" id="school-code" class="form-input" placeholder="CBSE/AFF/2130894">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label for="school-address">Location & Address</label>
+                <input type="text" id="school-address" class="form-input" placeholder="North Campus, Knowledge Park, City">
+              </div>
+              <div class="form-group col-6">
+                <label for="school-motto">School Motto</label>
+                <input type="text" id="school-motto" class="form-input" placeholder="Knowledge, Integrity, Excellence">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label for="academic-session">Academic Session</label>
+                <input type="text" id="academic-session" class="form-input" placeholder="2025 - 2026">
+              </div>
+              <div class="form-group col-6">
+                <label for="exam-title">Examination Title</label>
+                <input type="text" id="exam-title" class="form-input" placeholder="ANNUAL CONSOLIDATED ASSESSMENT">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Student Particulars -->
+        <div class="accordion-item">
+          <button type="button" class="accordion-toggle" aria-expanded="false">
+            <span class="acc-title"><i class="ph-bold ph-user"></i> Student Personal Profile</span>
+            <i class="ph-bold ph-caret-down acc-arrow"></i>
+          </button>
+          <div class="accordion-content">
+            <div class="form-row">
+              <div class="form-group col-8">
+                <label for="student-name">Student Full Name</label>
+                <input type="text" id="student-name" class="form-input" placeholder="e.g. Aarav Sharma">
+              </div>
+              <div class="form-group col-4">
+                <label for="student-roll">Roll Number</label>
+                <input type="text" id="student-roll" class="form-input" placeholder="26">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-4">
+                <label for="student-class">Class & Section</label>
+                <input type="text" id="student-class" class="form-input" placeholder="X - Section A">
+              </div>
+              <div class="form-group col-4">
+                <label for="student-admission">Admission / Reg No.</label>
+                <input type="text" id="student-admission" class="form-input" placeholder="ADM-2022-8419">
+              </div>
+              <div class="form-group col-4">
+                <label for="student-dob">Date of Birth</label>
+                <input type="text" id="student-dob" class="form-input" placeholder="14-Oct-2010">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label for="father-name">Father's Name</label>
+                <input type="text" id="father-name" class="form-input" placeholder="Mr. Rajesh Sharma">
+              </div>
+              <div class="form-group col-6">
+                <label for="mother-name">Mother's Name</label>
+                <input type="text" id="mother-name" class="form-input" placeholder="Mrs. Sunita Sharma">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label for="attendance-attended">Days Attended</label>
+                <input type="number" id="attendance-attended" class="form-input" min="0" value="204">
+              </div>
+              <div class="form-group col-6">
+                <label for="attendance-total">Total Working Days</label>
+                <input type="number" id="attendance-total" class="form-input" min="1" value="218">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: Scholastic Subjects & Marks -->
+        <div class="accordion-item active">
+          <button type="button" class="accordion-toggle" aria-expanded="true">
+            <span class="acc-title"><i class="ph-bold ph-books"></i> Scholastic Academic Subjects</span>
+            <i class="ph-bold ph-caret-down acc-arrow"></i>
+          </button>
+          <div class="accordion-content">
+            <p class="section-hint">Theory & Practical marks automatically compute Totals, Percentages, Letter Grades, and Grade Points.</p>
+            
+            <div class="subjects-header-row">
+              <span class="sub-col name">Subject</span>
+              <span class="sub-col marks">Theory</span>
+              <span class="sub-col marks">Pract.</span>
+              <span class="sub-col action">Del</span>
+            </div>
+
+            <div id="subjects-editor-list" class="subjects-editor-list">
+              <!-- Dynamically populated rows -->
+            </div>
+
+            <button type="button" id="btn-add-subject" class="btn btn-outline btn-block mt-2">
+              <i class="ph-bold ph-plus-circle"></i> Add New Subject
+            </button>
+          </div>
+        </div>
+
+        <!-- Section 5: Co-Scholastic & Life Skills -->
+        <div class="accordion-item">
+          <button type="button" class="accordion-toggle" aria-expanded="false">
+            <span class="acc-title"><i class="ph-bold ph-star"></i> Co-Scholastic Activities & Skills</span>
+            <i class="ph-bold ph-caret-down acc-arrow"></i>
+          </button>
+          <div class="accordion-content">
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label for="grade-discipline">Discipline & Conduct</label>
+                <select id="grade-discipline" class="form-select">
+                  <option value="A">Grade A (Exemplary)</option>
+                  <option value="B">Grade B (Good)</option>
+                  <option value="C">Grade C (Satisfactory)</option>
+                </select>
+              </div>
+              <div class="form-group col-6">
+                <label for="grade-work">Work Education / CS</label>
+                <select id="grade-work" class="form-select">
+                  <option value="A">Grade A (Outstanding)</option>
+                  <option value="B">Grade B (Proficient)</option>
+                  <option value="C">Grade C (Developing)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label for="grade-art">Art & Cultural Education</label>
+                <select id="grade-art" class="form-select">
+                  <option value="A">Grade A (Outstanding)</option>
+                  <option value="B">Grade B (Proficient)</option>
+                  <option value="C">Grade C (Developing)</option>
+                </select>
+              </div>
+              <div class="form-group col-6">
+                <label for="grade-health">Health & Physical Education (Sports)</label>
+                <select id="grade-health" class="form-select">
+                  <option value="A">Grade A (Outstanding)</option>
+                  <option value="B">Grade B (Proficient)</option>
+                  <option value="C">Grade C (Developing)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 6: Remarks & Signatures -->
+        <div class="accordion-item">
+          <button type="button" class="accordion-toggle" aria-expanded="false">
+            <span class="acc-title"><i class="ph-bold ph-signature"></i> Teacher Remarks & Signatures</span>
+            <i class="ph-bold ph-caret-down acc-arrow"></i>
+          </button>
+          <div class="accordion-content">
+            <div class="form-group">
+              <label for="teacher-remarks">Class Teacher Remarks & Evaluation</label>
+              <textarea id="teacher-remarks" class="form-textarea" rows="2" placeholder="Exceptional dedication and inquisitive intellect throughout the academic year. Promoted with Distinction."></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label for="sign-teacher">Class Teacher Signatory Title</label>
+                <input type="text" id="sign-teacher" class="form-input" value="Mrs. Anita Verma (Class Teacher)">
+              </div>
+              <div class="form-group col-6">
+                <label for="sign-principal">Principal Signatory Title</label>
+                <input type="text" id="sign-principal" class="form-input" value="Dr. M. R. Swaminathan (Principal)">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label for="issue-date">Date of Declaration / Issue</label>
+                <input type="text" id="issue-date" class="form-input" value="24-October-2026">
+              </div>
+              <div class="form-group col-6">
+                <label for="final-result-status">Promotion Decision</label>
+                <select id="final-result-status" class="form-select">
+                  <option value="PASSED WITH FIRST DIVISION & DISTINCTION">PASSED WITH DISTINCTION</option>
+                  <option value="PASSED - PROMOTED TO NEXT HIGHER CLASS">PASSED - PROMOTED</option>
+                  <option value="PROMOTED UNDER SPECIAL CONSIDERATION">PROMOTED (SPECIAL)</option>
+                  <option value="ELIGIBLE FOR IMPROVEMENT / COMPARTMENT">COMPARTMENT / IMPROVEMENT</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT SIDE: Live Realistic Marksheet Sheet & Analytics Dashboard -->
+      <section class="preview-panel" id="preview-panel" aria-label="Live Marksheet Preview">
+
+        <!-- Top Live Stats Bar -->
+        <div class="analytics-bar">
+          <div class="stat-card">
+            <span class="stat-label">Grand Total</span>
+            <span class="stat-value" id="stat-total-marks">478 / 500</span>
+          </div>
+          <div class="stat-card highlight">
+            <span class="stat-label">Percentage</span>
+            <span class="stat-value" id="stat-percentage">95.6%</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">CGPA (10-Scale)</span>
+            <span class="stat-value" id="stat-cgpa">9.8</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Overall Grade</span>
+            <span class="stat-badge grade-a1" id="stat-grade">A1</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Attendance</span>
+            <span class="stat-value" id="stat-attendance">93.6%</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Result Status</span>
+            <span class="stat-badge pass" id="stat-result">PASSED</span>
+          </div>
+        </div>
+
+        <!-- The Printable Document Container (Styled exactly like standard A4 Sheet) -->
+        <div class="sheet-viewport">
+          <div class="report-sheet theme-royal border-ornate" id="printable-report-sheet">
+
+            <!-- Center Watermark Overlay -->
+            <div class="watermark-overlay" id="sheet-watermark">
+              <img src="assets/school_crest.jpg" alt="School Crest Watermark">
+            </div>
+
+            <!-- Outer Filigree Decorative Corners -->
+            <div class="ornate-corner top-left"></div>
+            <div class="ornate-corner top-right"></div>
+            <div class="ornate-corner bottom-left"></div>
+            <div class="ornate-corner bottom-right"></div>
+
+            <div class="sheet-inner-border">
+
+              <!-- INSTITUTION HEADER -->
+              <header class="sheet-school-header">
+                <div class="school-logo-col">
+                  <img src="assets/school_crest.jpg" alt="Official School Crest" class="school-crest-img">
+                </div>
+
+                <div class="school-meta-col">
+                  <div class="school-motto-tag" id="disp-school-motto">"KNOWLEDGE • INTEGRITY • EXCELLENCE"</div>
+                  <h2 class="sheet-school-title" id="disp-school-name">ST. AUGUSTINE ACADEMY OF EXCELLENCE</h2>
+                  <p class="sheet-affiliation" id="disp-school-board">Affiliated to Central Board of Secondary Education (CBSE), New Delhi</p>
+                  <p class="sheet-address" id="disp-school-address">North Campus, Knowledge Park IV, Institutional Area • Affil No: 2130894 | School Code: 70124</p>
+                  
+                  <div class="sheet-doc-ribbon">
+                    <span class="ribbon-text" id="disp-exam-title">ANNUAL CONSOLIDATED ACADEMIC REPORT CARD</span>
+                    <span class="ribbon-session" id="disp-session">SESSION: 2025 - 2026</span>
+                  </div>
+                </div>
+
+                <div class="student-photo-col" id="student-photo-container">
+                  <img src="assets/student_photo.jpg" alt="Student Passport Photo" class="student-avatar-img" id="disp-student-photo">
+                  <span class="photo-caption">Student Photo</span>
+                </div>
+              </header>
+
+              <!-- STUDENT PARTICULARS GRID -->
+              <section class="sheet-student-info">
+                <div class="info-grid">
+                  <div class="info-cell">
+                    <span class="info-label">STUDENT NAME:</span>
+                    <span class="info-value text-bold" id="disp-student-name">Aarav Sharma</span>
+                  </div>
+                  <div class="info-cell">
+                    <span class="info-label">ROLL NUMBER:</span>
+                    <span class="info-value text-bold" id="disp-roll-no">26</span>
+                  </div>
+                  <div class="info-cell">
+                    <span class="info-label">CLASS & SECTION:</span>
+                    <span class="info-value" id="disp-class-sec">Class X - Section A</span>
+                  </div>
+                  <div class="info-cell">
+                    <span class="info-label">ADMISSION NO:</span>
+                    <span class="info-value" id="disp-admission-no">ADM-2022-8419</span>
+                  </div>
+                  <div class="info-cell">
+                    <span class="info-label">FATHER'S NAME:</span>
+                    <span class="info-value" id="disp-father-name">Mr. Rajesh Sharma</span>
+                  </div>
+                  <div class="info-cell">
+                    <span class="info-label">MOTHER'S NAME:</span>
+                    <span class="info-value" id="disp-mother-name">Mrs. Sunita Sharma</span>
+                  </div>
+                  <div class="info-cell">
+                    <span class="info-label">DATE OF BIRTH:</span>
+                    <span class="info-value" id="disp-dob">14-Oct-2010</span>
+                  </div>
+                  <div class="info-cell">
+                    <span class="info-label">ATTENDANCE:</span>
+                    <span class="info-value" id="disp-attendance">204 / 218 Days (93.6%)</span>
+                  </div>
+                </div>
+              </section>
+
+              <!-- PART 1: SCHOLASTIC PERFORMANCE TABLE -->
+              <section class="sheet-table-section">
+                <div class="section-badge-bar">
+                  <span class="section-title-badge">PART 1: SCHOLASTIC AREAS (ACADEMIC ACHIEVEMENT)</span>
+                  <span class="grading-scale-badge">10-Point CBSE Grading Scale</span>
+                </div>
+
+                <table class="marksheet-table" id="disp-marks-table">
+                  <thead>
+                    <tr>
+                      <th class="col-code">Code</th>
+                      <th class="col-sub">Subject Name</th>
+                      <th class="col-num">Max Theory</th>
+                      <th class="col-num">Theory Obtained</th>
+                      <th class="col-num">Max Pract/IA</th>
+                      <th class="col-num">Pract/IA Obtained</th>
+                      <th class="col-num">Total Max</th>
+                      <th class="col-num highlight-col">Total Marks</th>
+                      <th class="col-pct">Percentage</th>
+                      <th class="col-grade">Grade</th>
+                      <th class="col-gp">Grade Pt</th>
+                    </tr>
+                  </thead>
+                  <tbody id="disp-marks-tbody">
+                    <!-- Populated by JS -->
+                  </tbody>
+                  <tfoot>
+                    <tr class="summary-row">
+                      <td colspan="6" class="text-right text-bold">GRAND AGGREGATE TOTAL:</td>
+                      <td class="text-center text-bold" id="disp-total-max">500</td>
+                      <td class="text-center text-bold highlight-col" id="disp-total-obt">478</td>
+                      <td class="text-center text-bold" id="disp-grand-pct">95.6%</td>
+                      <td class="text-center text-bold grade-cell" id="disp-grand-grade">A1</td>
+                      <td class="text-center text-bold" id="disp-grand-cgpa">9.8</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </section>
+
+              <!-- PART 2: CO-SCHOLASTIC & LIFE SKILLS -->
+              <section class="sheet-coscholastic-section">
+                <div class="section-badge-bar sub-badge">
+                  <span class="section-title-badge">PART 2: CO-SCHOLASTIC & DISCIPLINE (3-POINT SCALE: A=Outstanding, B=Very Good, C=Fair)</span>
+                </div>
+
+                <div class="coscholastic-grid">
+                  <div class="coscholastic-item">
+                    <span class="co-activity">1. Work Education (Computer Applications & Lab)</span>
+                    <span class="co-grade" id="disp-grade-work">Grade A</span>
+                  </div>
+                  <div class="coscholastic-item">
+                    <span class="co-activity">2. Art & Cultural Education (Creative Expression)</span>
+                    <span class="co-grade" id="disp-grade-art">Grade A</span>
+                  </div>
+                  <div class="coscholastic-item">
+                    <span class="co-activity">3. Health & Physical Education (Sports, Yoga & Fitness)</span>
+                    <span class="co-grade" id="disp-grade-health">Grade A</span>
+                  </div>
+                  <div class="coscholastic-item">
+                    <span class="co-activity">4. Discipline, Ethics & Environmental Conduct</span>
+                    <span class="co-grade" id="disp-grade-discipline">Grade A</span>
+                  </div>
+                </div>
+              </section>
+
+              <!-- PART 3: REMARKS, RESULT & SIGNATURES -->
+              <section class="sheet-footer-section">
+                <div class="remarks-box">
+                  <div class="remarks-header">
+                    <span class="remarks-label"><i class="ph-bold ph-chats-circle"></i> CLASS TEACHER'S REMARKS:</span>
+                    <span class="result-highlight-pill" id="disp-final-status">PASSED WITH FIRST DIVISION & DISTINCTION</span>
+                  </div>
+                  <p class="remarks-text" id="disp-remarks">
+                    Aarav exhibits stellar academic prowess, leadership potential, and deep curiosity. Outstanding conceptual clarity in Mathematics and Science. Keep shining!
+                  </p>
+                </div>
+
+                <!-- Grading Scale Key Legend -->
+                <div class="grading-legend">
+                  <span class="legend-title">GRADING SCALE:</span>
+                  <span class="legend-item"><b>A1:</b> 91-100 (GP 10)</span>
+                  <span class="legend-item"><b>A2:</b> 81-90 (GP 9)</span>
+                  <span class="legend-item"><b>B1:</b> 71-80 (GP 8)</span>
+                  <span class="legend-item"><b>B2:</b> 61-70 (GP 7)</span>
+                  <span class="legend-item"><b>C1:</b> 51-60 (GP 6)</span>
+                  <span class="legend-item"><b>C2:</b> 41-50 (GP 5)</span>
+                  <span class="legend-item"><b>D:</b> 33-40 (GP 4)</span>
+                  <span class="legend-item"><b>E:</b> &lt;33 (Fail)</span>
+                </div>
+
+                <!-- Signatures and Official Certified Seal Row -->
+                <div class="signatures-row">
+                  <div class="sign-block">
+                    <div class="sign-handwriting teacher-sign">Anita Verma</div>
+                    <div class="sign-line"></div>
+                    <div class="sign-title" id="disp-sign-teacher">Class Teacher Signature</div>
+                    <div class="sign-date" id="disp-date-teacher">Date: 24-Oct-2026</div>
+                  </div>
+
+                  <div class="seal-block" id="sheet-seal-block">
+                    <img src="assets/official_seal.jpg" alt="Official Institutional Certified Seal Stamp" class="official-seal-img">
+                  </div>
+
+                  <div class="sign-block">
+                    <div class="sign-handwriting principal-sign">M. R. Swaminathan</div>
+                    <div class="sign-line"></div>
+                    <div class="sign-title" id="disp-sign-principal">Principal / Head of Institution</div>
+                    <div class="sign-date">Affiliation Stamp Verified</div>
+                  </div>
+                </div>
+
+              </section>
+
+              <!-- Footer Verification Barcode Line -->
+              <footer class="sheet-security-footer">
+                <span>Secure Academic Record ID: SG-2026-X-08419-V3</span>
+                <span>• Generated digitally via SmartGrade Institutional System •</span>
+                <span>Scan QR for Board Verification</span>
+              </footer>
+
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast-message" class="toast-message" role="alert" aria-live="polite"></div>
+
+  <!-- Main JavaScript Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
